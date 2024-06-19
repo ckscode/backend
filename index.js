@@ -4,7 +4,7 @@ import connectDB from './Database/Config.js';
 import cors from 'cors'
 import userRouter from './Routers/userRoutes.js'
 import { errorHandler } from './Middlewares/errorMiddleware.js';
-
+import cookieParser from 'cookie-parser';
 //Dotenv
 dotenv.config();
 const app = express();
@@ -12,6 +12,7 @@ const app = express();
 //Middlewares
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
 //Connecting DB
