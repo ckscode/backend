@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 export const errorHandler = (err,req,res,next) =>{
-    console.error(err.stack); // Log the error stack for debugging
+    // console.error(err.stack); // Log the error stack for debugging
 
     // Set the status code and send the error response
     res.status(err.status || 500).json({
