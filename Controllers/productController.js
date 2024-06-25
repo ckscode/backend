@@ -99,3 +99,73 @@ export const deleteProduct =asyncHandler(async(req,res)=>{
     res.status(200).json({message:"deleted successfully",data:product})
 })
 
+
+export const updateProduct = asyncHandler(async(req,res)=>{
+    const {name,sku,quantity,price,location,description} = req.body;
+
+    const productId = req.params.id
+    const product = await Products.findById(productId) 
+  
+    if(!product){
+        res.status(404)
+        throw new Error("product not found")
+    }
+
+    if(product.user.toString() !== req.user.id){
+        res.status(401)
+        throw new Error("user not authorized")
+    }
+
+
+//handle file upload
+const fileData = {}
+if(req.file){
+    //save
+    try{
+        const uploadedFile = await cloudinary.uploader.upload(req.file.path,
+            {folder:"inventory app",resource_type:"image"});
+            Object.assign(fileData,{fileName:req.file.originalname,
+                filePath:uploadedFile.secure_url,
+                fileType:req.file.mimetype,
+                fileSize:req.file.size,
+            })
+    }catch{
+       res.status(404)
+       throw new Error("image could not be uploaded")
+    }
+
+
+}
+
+// product.name = name;
+// product.quantity = quantity;
+// product.price = price;
+// product.location= location;
+// product.description = description;
+// product.image = fileData || product.image;
+
+// await product.save();
+console.log(name)
+//update product
+
+const updatedProduct =await Products.findByIdAndUpdate({_id:productId},
+    {
+       name,
+       quantity,
+       price,
+       location,
+       description,
+       image:Object.keys(fileData).length>0?fileData:product.image 
+    },
+    {
+       new:true,
+       runValidators:true
+    }
+)
+
+
+
+res.status(200).json({message:"product",data:updatedProduct})
+
+})
+
