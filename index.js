@@ -1,9 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './Database/Config.js';
-import cors from 'cors'
-import userRouter from './Routers/userRoutes.js'
-import productRoute from './Routers/productRoute.js'
+import cors from 'cors';
+import userRouter from './Routers/userRoutes.js';
+import productRoute from './Routers/productRoute.js';
+import contactRoute from './Routers/contactRoute.js'
 import { errorHandler } from './Middlewares/errorMiddleware.js';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
@@ -29,7 +30,8 @@ connectDB()
 
 //Routes
 app.use('/api/users',userRouter);
-app.use('/api/products',productRoute)
+app.use('/api/products',productRoute);
+app.use('/api/contact',contactRoute)
 
 app.use(errorHandler)
 
