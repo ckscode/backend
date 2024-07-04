@@ -28,7 +28,6 @@ export const registerUser =asyncHandler(
         //password length
         if(password.length < 8){
             res.status(404).json({message:'password must be more than 8 characters'})
-            throw new Error('password must be more than 6 characters')
         }
 
         //checking user already exists
@@ -133,7 +132,7 @@ export const getUser = asyncHandler(async(req,res)=>{
     res.status(200).json({message:'User Details',data:{_id,name,email,contact,photo,bio}})
   }else{
     res.status(404).json({message:'User not found'})
-    throw new Error('User not found')
+
   }
 })
 
@@ -182,12 +181,12 @@ export const updatePassword =asyncHandler(async(req,res) =>{
    
  if(!user){
   res.status(400).json({message:"User not found,please sign in"})
-  throw new Error("User not found,please sign in")
+
  }
 
    if(!oldPassword || !newPassword){
     res.status(404).json({message:"please fill up old password and new password"})
-    throw new Error('please fill up old password and new password')
+ 
    }
 
 
@@ -200,11 +199,11 @@ export const updatePassword =asyncHandler(async(req,res) =>{
         res.status(200).json({message:'password changed successfully'})
       }else{
         res.status(404).json({message:"please give a new password which is different from the old password"})
-        throw new Error('please give a new password which is different from the old password')
+      
       }
     }else{
       res.status(404).json({message:'Old password is incorrect'})
-      throw new Error('Old password is incorrect')
+
     }
   }
 ) 
@@ -216,7 +215,7 @@ export const forgotPassword = asyncHandler(async(req,res)=>{
 
     if(!user){
       res.status(404)
-      throw new Error('User does not exist')
+   
     }
    
     //delete existing Token
@@ -255,8 +254,8 @@ export const forgotPassword = asyncHandler(async(req,res)=>{
      await sendEmail(subject,message,sent_from,sent_to)
      res.status(200).json({success:true,message:"reset email sent"})
    }catch(error){
-         res.status(500)
-         throw new Error('EMail not sent, please try again')
+         res.status(500).json({message:"server error",error:error})
+        
    }
 })
 
@@ -276,7 +275,7 @@ export const resetPassword = asyncHandler(async(req,res)=>{
 
   if(!userToken){
     res.status(404).json({message:'Invalid or expired token'})
-    throw new Error("Invalid or expired token")
+
   }
 
   //Find user
