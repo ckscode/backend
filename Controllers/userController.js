@@ -21,21 +21,20 @@ export const registerUser =asyncHandler(
         
         //fields exists
         if(!name || !email || !password){
-            res.status(404)
-            throw new Error('please fill all the fields')
+            res.status(404).json({message:'please fill all the fields'})
+        
         }
 
         //password length
-        if(password.length < 6){
-            res.status(404)
+        if(password.length < 8){
+            res.status(404).json({message:'password must be more than 8 characters'})
             throw new Error('password must be more than 6 characters')
         }
 
         //checking user already exists
         const userExists =await User.findOne({email:email})
           if(userExists){
-            res.status(404)
-            throw new Error('User already exists');
+            res.status(404).json({message:'User already exists'})
           }
          
 
@@ -60,8 +59,7 @@ export const registerUser =asyncHandler(
             const {_id,name,email,contact,photo,bio} = newUser
             res.status(200).json({message:'user added successfully',data:{_id,name,email,contact,photo,bio,token}})
           }else{
-            res.status(404)
-            throw new Error('Invalid user data')
+            res.status(404).json({message:'Invalid user data'})
           }
          
 }
@@ -72,16 +70,15 @@ export const loginUser =asyncHandler(async(req,res) =>{
      const {email,password} = req.body;
 
      if(!email || !password){
-      res.status(404)
-      throw new Error('please add email and password')
+      res.status(404).json({message:'please add email and password'})
      }
 
 
-     //check i user exists
+     //check if user exists
      const user  = await User.findOne({email})
      if(!user){
-      res.status(404)
-      throw new Error('User not found please Signup');
+      res.status(404).json({message:'User not found please Signup'})
+
     }
 
    
@@ -90,8 +87,8 @@ export const loginUser =asyncHandler(async(req,res) =>{
     const compare = await bcrypt.compare(password,user.password);
 
     if(!compare){
-      res.status(404)
-      throw new Error('Invalid password')
+      res.status(404).json({message:'Invalid password'})
+ 
     }
 
      //generate token
@@ -135,7 +132,7 @@ export const getUser = asyncHandler(async(req,res)=>{
     const {_id,name,email,contact,photo,bio} = user
     res.status(200).json({message:'User Details',data:{_id,name,email,contact,photo,bio}})
   }else{
-    res.status(404)
+    res.status(404).json({message:'User not found'})
     throw new Error('User not found')
   }
 })
@@ -184,12 +181,12 @@ export const updatePassword =asyncHandler(async(req,res) =>{
    const {oldPassword,newPassword} = req.body;
    
  if(!user){
-  res.status(400)
+  res.status(400).json({message:"User not found,please sign in"})
   throw new Error("User not found,please sign in")
  }
 
    if(!oldPassword || !newPassword){
-    res.status(404)
+    res.status(404).json({message:"please fill up old password and new password"})
     throw new Error('please fill up old password and new password')
    }
 
@@ -202,11 +199,11 @@ export const updatePassword =asyncHandler(async(req,res) =>{
         await user.save();
         res.status(200).json({message:'password changed successfully'})
       }else{
-        res.status(404)
+        res.status(404).json({message:"please give a new password which is different from the old password"})
         throw new Error('please give a new password which is different from the old password')
       }
     }else{
-      res.status(404)
+      res.status(404).json({message:'Old password is incorrect'})
       throw new Error('Old password is incorrect')
     }
   }
@@ -229,7 +226,7 @@ export const forgotPassword = asyncHandler(async(req,res)=>{
     }
    //create Reset token
    let resetToken = crypto.randomBytes(32).toString("hex") + user._id;
-   console.log(resetToken) 
+
 
    const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
 
@@ -241,7 +238,7 @@ export const forgotPassword = asyncHandler(async(req,res)=>{
     expiresAt:Date.now() + 30* (60 * 1000) //30 minutes
    }).save()
 
-   const resetUrl = `${process.env.FRONTEND_URL}/registerpassword/${resetToken}`
+   const resetUrl = `${process.env.FRONTEND_URL}/reset/${resetToken}`
 
    //reset email
    const message = `
@@ -278,7 +275,7 @@ export const resetPassword = asyncHandler(async(req,res)=>{
   })
 
   if(!userToken){
-    res.status(404)
+    res.status(404).json({message:'Invalid or expired token'})
     throw new Error("Invalid or expired token")
   }
 
