@@ -4,10 +4,10 @@ import {v2 as cloudinary} from 'cloudinary';
 
 
 export const createProduct = asyncHandler(async(req,res)=>{
-const {name,sku,quantity,price,location,description} = req.body;
+const {name,sku,category,quantity,price,description} = req.body;
 
 //validation
-if(!name || !quantity || !price || !description || !location){
+if(!name || !quantity || !price || !description || !category){
     console.log(req.body)
     res.status(404)
     throw new Error("please fill all the fields")
@@ -39,9 +39,9 @@ const product = new Products({
        user:req.user.id,
        name:name,
        sku:sku,
+       category:category,
        quantity:quantity,
        price:price,
-       location:location,
        description:description,
        image:fileData
 });
@@ -101,7 +101,7 @@ export const deleteProduct =asyncHandler(async(req,res)=>{
 
 
 export const updateProduct = asyncHandler(async(req,res)=>{
-    const {name,sku,quantity,price,location,description} = req.body;
+    const {name,sku,category,quantity,price,description} = req.body;
 
     const productId = req.params.id
     const product = await Products.findById(productId) 
@@ -151,6 +151,7 @@ console.log(name)
 const updatedProduct =await Products.findByIdAndUpdate({_id:productId},
     {
        name,
+       category,
        quantity,
        price,
        location,
