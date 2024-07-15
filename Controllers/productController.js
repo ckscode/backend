@@ -86,12 +86,12 @@ export const deleteProduct =asyncHandler(async(req,res)=>{
     const product = await Products.findById(req.params.id);
 
     if(!product){
-        res.status(404)
+        res.status(404).json({message:"product not found"})
         throw new Error("product not found")
     }
 
     if(product.user.toString() !== req.user.id){
-        res.status(401)
+        res.status(401).json({message:"user not authorized"})
         throw new Error("user not authorized")
     }
 
@@ -107,12 +107,12 @@ export const updateProduct = asyncHandler(async(req,res)=>{
     const product = await Products.findById(productId) 
   
     if(!product){
-        res.status(404)
+        res.status(404).json({message:"product not found"})
         throw new Error("product not found")
     }
 
     if(product.user.toString() !== req.user.id){
-        res.status(401)
+        res.status(401).json({message:"user not authorized"})
         throw new Error("user not authorized")
     }
 
@@ -154,7 +154,6 @@ const updatedProduct =await Products.findByIdAndUpdate({_id:productId},
        category,
        quantity,
        price,
-       location,
        description,
        image:Object.keys(fileData).length>0?fileData:product.image 
     },

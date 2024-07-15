@@ -21,7 +21,7 @@ const userSchema = mongoose.Schema({
     },
     photo:{
         type:String,
-        default:"https://www.vecteezy.com/vector-art/8442086-illustration-of-human-icon-vector-user-symbol-icon-modern-design-on-blank-background"
+        default:"https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
     },
     bio:{
         type:String,
