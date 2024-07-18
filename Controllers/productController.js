@@ -8,7 +8,6 @@ const {name,sku,category,quantity,price,description} = req.body;
 
 //validation
 if(!name || !quantity || !price || !description || !category){
-    console.log(req.body)
     res.status(404)
     throw new Error("please fill all the fields")
 }
@@ -137,16 +136,7 @@ if(req.file){
 
 }
 
-// product.name = name;
-// product.quantity = quantity;
-// product.price = price;
-// product.location= location;
-// product.description = description;
-// product.image = fileData || product.image;
 
-// await product.save();
-console.log(name)
-//update product
 
 const updatedProduct =await Products.findByIdAndUpdate({_id:productId},
     {
