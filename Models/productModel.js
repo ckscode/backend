@@ -40,6 +40,21 @@ const productSchema = mongoose.Schema({
   image:{
     type:Object,
     default:{}
+  },
+  seller:{
+    type:String,
+    required:[true,'Seller Name is Required']
+  },
+  sellerAddress:{
+    type:String,
+    required:[true,'Seller Address is Required']
+  },
+  delivered:{
+    type:Boolean,
+    required:[true,'Delivery Status is required']
+  },
+  deliveryDate:{
+    type:String,
   }
 },{
     timestamps:true

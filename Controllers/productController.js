@@ -4,7 +4,10 @@ import {v2 as cloudinary} from 'cloudinary';
 
 
 export const createProduct = asyncHandler(async(req,res)=>{
-const {name,sku,category,quantity,price,description} = req.body;
+    
+const {name,sku,category,quantity,price,description,
+    seller,sellerAddress,delivered,deliveryDate
+} = req.body;
 
 //validation
 if(!name || !quantity || !price || !description || !category){
@@ -42,7 +45,11 @@ const product = new Products({
        quantity:quantity,
        price:price,
        description:description,
-       image:fileData
+       image:fileData,
+       seller:seller,
+       sellerAddress:sellerAddress,
+       delivered:delivered,
+       deliveryDate:deliveryDate
 });
 
 await product.save();
@@ -100,7 +107,7 @@ export const deleteProduct =asyncHandler(async(req,res)=>{
 
 
 export const updateProduct = asyncHandler(async(req,res)=>{
-    const {name,sku,category,quantity,price,description} = req.body;
+    const {name,sku,category,quantity,price,description,seller,sellerAddress,delivered,deliveryDate} = req.body;
 
     const productId = req.params.id
     const product = await Products.findById(productId) 
@@ -145,7 +152,11 @@ const updatedProduct =await Products.findByIdAndUpdate({_id:productId},
        quantity,
        price,
        description,
-       image:Object.keys(fileData).length>0?fileData:product.image 
+       image:Object.keys(fileData).length>0?fileData:product.image,
+       seller,
+       sellerAddress,
+       delivered,
+       deliveryDate 
     },
     {
        new:true,
