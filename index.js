@@ -19,7 +19,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 //Middlewares
 app.use(cors({
-    origin:"https://cks-inventory-app.vercel.app",
+    origin:["http://localhost:5173","https://cks-inventory-app.vercel.app"],
     credentials:true,
 }
 ));
