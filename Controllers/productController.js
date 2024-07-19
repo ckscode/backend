@@ -28,8 +28,7 @@ if(req.file){
                 fileSize:req.file.size,
             })
     }catch{
-       res.status(404)
-       throw new Error("image could not be uploaded")
+       res.status(404).json({message:"image could not be uploaded"})
     }
 
 
@@ -93,12 +92,12 @@ export const deleteProduct =asyncHandler(async(req,res)=>{
 
     if(!product){
         res.status(404).json({message:"product not found"})
-        throw new Error("product not found")
+       
     }
 
     if(product.user.toString() !== req.user.id){
         res.status(401).json({message:"user not authorized"})
-        throw new Error("user not authorized")
+       
     }
 
     await product.deleteOne()
@@ -114,12 +113,12 @@ export const updateProduct = asyncHandler(async(req,res)=>{
   
     if(!product){
         res.status(404).json({message:"product not found"})
-        throw new Error("product not found")
+       
     }
 
     if(product.user.toString() !== req.user.id){
         res.status(401).json({message:"user not authorized"})
-        throw new Error("user not authorized")
+        
     }
 
 
@@ -136,8 +135,7 @@ if(req.file){
                 fileSize:req.file.size,
             })
     }catch{
-       res.status(404)
-       throw new Error("image could not be uploaded")
+       res.status(404).json({message:"image could not be uploaded"})
     }
 
 
