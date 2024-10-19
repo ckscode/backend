@@ -5,13 +5,13 @@ dotenv.config();
 const sendEmail =asyncHandler(
     async(subject,message,sent_from,sent_to,reply_to) =>{
         const  transporter = nodemailer.createTransport({
-         host: process.env.EMAIL_HOST,
-         service: 'outlook',
-         port:587,
-         auth:{
-             user:process.env.EMAIL_USER,
-             pass:process.env.EMAIL_PASS
-         },
+            secure:true,
+            host:'smtp.gmail.com',
+            port: 465,
+            auth:{
+                user:process.env.EMAIL_USER,
+                pass:process.env.EMAIL_PASS
+            },
          tls: {
              // do not fail on invalid certs
              rejectUnauthorized: false,
